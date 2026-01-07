@@ -2,6 +2,7 @@ package objects;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Reservation {
     LocalDateTime time;
@@ -59,4 +60,10 @@ public class Reservation {
         this.reservationLength = reservationLength;
     }
 
+    public String toString() {
+        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("dd/MM/yy h:mma");
+        return String.format("%s %s %s %d",
+                timeFormat.format(time),
+                firstName, lastName, guestCount);
+    }
 }
