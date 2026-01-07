@@ -3,6 +3,7 @@ package objects;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class Reservation {
     LocalDateTime time;
@@ -10,6 +11,8 @@ public class Reservation {
     String lastName;
     int guestCount;
     Duration reservationLength;
+
+    public static DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("dd/MM/yy h:mma", Locale.US);
 
     public Reservation(LocalDateTime time, String firstName, String lastName, int guestCount,
             Duration reservationLength) {
@@ -61,7 +64,6 @@ public class Reservation {
     }
 
     public String toString() {
-        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("dd/MM/yy h:mma");
         return String.format("%s %s %s %d",
                 timeFormat.format(time),
                 firstName, lastName, guestCount);
