@@ -10,15 +10,15 @@ import java.nio.file.Files;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RestaurantManagerTest {
-    static File reservationsFile = new File("src/reservations.txt");
-    static File inventoryFile = new File("src/inventory.txt");
-    static File profitFile = new File("src/profit.txt");
-    static File test1File = new File("src/test1.txt");
-    static File test2File = new File("src/test2.txt");
-    static File test3File = new File("src/test3.txt");
-    static File test4File = new File("src/test4.txt");
-    static File test5File = new File("src/test5.txt");
-    static File test6File = new File("src/test6.txt");
+    static File reservationsFile = new File("reservations.table.txt");
+    static File inventoryFile = new File("inventory.table.txt");
+    static File profitFile = new File("profit.table.txt");
+    static File test1File = new File("testFiles/test1.txt");
+    static File test2File = new File("testFiles/test2.txt");
+    static File test3File = new File("testFiles/test3.txt");
+    static File test4File = new File("testFiles/test4.txt");
+    static File test5File = new File("testFiles/test5.txt");
+    static File test6File = new File("testFiles/test6.txt");
 
     public static void clear_file(File file) {
         try (FileWriter fileWriter = new FileWriter(file)) {
