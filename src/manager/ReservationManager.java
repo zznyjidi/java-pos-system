@@ -36,10 +36,10 @@ public class ReservationManager {
                 Matcher matcher = reservationPattern.matcher(line);
                 if (!matcher.find())
                     throw new FileCorruptedException();
-                if (!addReservation(
+                if (!addReservation(new Reservation(
                         LocalDateTime.parse(matcher.group("daytime"), Reservation.timeFormat),
                         matcher.group("firstName"), matcher.group("lastName"),
-                        Integer.parseInt(matcher.group("guestCount")), defaultReservationLength))
+                        Integer.parseInt(matcher.group("guestCount")), defaultReservationLength)))
                     throw new FileCorruptedException();
             }
         } catch (FileNotFoundException e) {
@@ -55,15 +55,23 @@ public class ReservationManager {
         }
     }
 
-    public boolean addReservation(LocalDateTime time, String firstName, String lastName,
-            int guestCount, Duration reservationLength) {
+    public boolean addReservation(Reservation newReservation) {
         for (Reservation reservation : reservations) {
-            if (reservation.getFirstName().equals(firstName) && reservation.getLastName().equals(lastName)
-                    && reservation.getTime().toLocalDate().equals(time.toLocalDate()))
+            if (newReservation.getFirstName().equals(reservation.getFirstName())
+                    && newReservation.getLastName().equals(reservation.getLastName())
+                    && newReservation.getTime().toLocalDate().equals(reservation.getTime().toLocalDate()))
                 return false;
         }
-        reservations.add(new Reservation(time, firstName, lastName, guestCount, reservationLength));
+        reservations.add(newReservation);
         return true;
+    }
+
+    public boolean addReservationAndSync(Reservation newReservation) throws IOException {
+        readFile();
+        boolean state = addReservation(newReservation);
+        if (state)
+            writeFile();
+        return state;
     }
 
     public List<Reservation> getReservations() {
