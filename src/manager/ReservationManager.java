@@ -5,13 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import exception.FileCorruptedException;
 import objects.Reservation;
@@ -19,9 +15,6 @@ import objects.Reservation;
 public class ReservationManager {
     List<Reservation> reservations = new ArrayList<>();
     File reservationFile;
-    Duration defaultReservationLength = Duration.ofHours(1);
-    Pattern reservationPattern = Pattern.compile(
-            "(?<daytime>[0-9]{2}\\/[0-9]{2}\\/[0-9]{2,4} [0-9]{1,2}:[0-9]{2}(AM|PM)) (?<firstName>[a-zA-Z]+) (?<lastName>[a-zA-Z]+) (?<guestCount>[0-9]+)");
 
     public ReservationManager(File reservationFile) {
         this.reservationFile = reservationFile;
@@ -33,13 +26,7 @@ public class ReservationManager {
                 String line = file.nextLine();
                 if (line.isEmpty())
                     continue;
-                Matcher matcher = reservationPattern.matcher(line);
-                if (!matcher.find())
-                    throw new FileCorruptedException();
-                if (!addReservation(new Reservation(
-                        LocalDateTime.parse(matcher.group("daytime"), Reservation.timeFormat),
-                        matcher.group("firstName"), matcher.group("lastName"),
-                        Integer.parseInt(matcher.group("guestCount")), defaultReservationLength)))
+                if (!addReservation(Reservation.fromString(line)))
                     throw new FileCorruptedException();
             }
         } catch (FileNotFoundException e) {
