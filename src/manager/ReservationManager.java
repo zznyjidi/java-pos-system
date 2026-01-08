@@ -5,11 +5,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import exception.FileCorruptedException;
+import objects.OperationResult;
 import objects.Reservation;
 
 public class ReservationManager {
@@ -26,7 +28,7 @@ public class ReservationManager {
                 String line = file.nextLine();
                 if (line.isEmpty())
                     continue;
-                if (!addReservation(Reservation.fromString(line)))
+                if (!addReservation(Reservation.fromString(line)).getStatus())
                     throw new FileCorruptedException();
             }
         } catch (FileNotFoundException e) {
@@ -42,23 +44,40 @@ public class ReservationManager {
         }
     }
 
-    public boolean addReservation(Reservation newReservation) {
+    public OperationResult<Reservation, Reservation> addReservation(Reservation newReservation) {
+        LocalDateTime newReservationStartTime = newReservation.getTime();
+        LocalDateTime newReservationEndTime = newReservationStartTime.plus(newReservation.getReservationLength());
+        List<Reservation> overlappedReservations = new ArrayList<>();
         for (Reservation reservation : reservations) {
+            LocalDateTime reservationStartTime = reservation.getTime();
+            LocalDateTime reservationEndTime = reservationStartTime.plus(reservation.getReservationLength());
+
             if (newReservation.getFirstName().equals(reservation.getFirstName())
                     && newReservation.getLastName().equals(reservation.getLastName())
-                    && newReservation.getTime().toLocalDate().equals(reservation.getTime().toLocalDate()))
-                return false;
+                    && newReservationStartTime.toLocalDate().equals(reservationStartTime.toLocalDate()))
+                return OperationResult.failed(reservation,
+                        "One person is only allow to make one reservation per day: ");
+
+            if (newReservationStartTime.isBefore(reservationEndTime)
+                    && reservationStartTime.isBefore(newReservationEndTime)) {
+                overlappedReservations.add(reservation);
+            }
         }
         reservations.add(newReservation);
-        return true;
+        return OperationResult.success(newReservation, "Reservation Created: ");
     }
 
-    public boolean addReservationAndSync(Reservation newReservation) throws IOException {
-        readFile();
-        boolean state = addReservation(newReservation);
-        if (state)
-            writeFile();
-        return state;
+    public OperationResult<OperationResult<Reservation, Reservation>, IOException> addReservationAndSync(
+            Reservation newReservation) {
+        try {
+            readFile();
+            OperationResult<Reservation, Reservation> state = addReservation(newReservation);
+            if (state.getStatus())
+                writeFile();
+            return OperationResult.success(state);
+        } catch (IOException e) {
+            return OperationResult.failed(e);
+        }
     }
 
     public List<Reservation> getReservations() {
