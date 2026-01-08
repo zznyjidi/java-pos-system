@@ -5,23 +5,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import exception.FileCorruptedException;
+import objects.OperationResult;
 import objects.Reservation;
 
 public class ReservationManager {
     List<Reservation> reservations = new ArrayList<>();
     File reservationFile;
-    Duration defaultReservationLength = Duration.ofHours(1);
-    Pattern reservationPattern = Pattern.compile(
-            "(?<daytime>[0-9]{2}\\/[0-9]{2}\\/[0-9]{2,4} [0-9]{1,2}:[0-9]{2}(AM|PM)) (?<firstName>[a-zA-Z]+) (?<lastName>[a-zA-Z]+) (?<guestCount>[0-9]+)");
 
     public ReservationManager(File reservationFile) {
         this.reservationFile = reservationFile;
@@ -33,13 +28,7 @@ public class ReservationManager {
                 String line = file.nextLine();
                 if (line.isEmpty())
                     continue;
-                Matcher matcher = reservationPattern.matcher(line);
-                if (!matcher.find())
-                    throw new FileCorruptedException();
-                if (!addReservation(new Reservation(
-                        LocalDateTime.parse(matcher.group("daytime"), Reservation.timeFormat),
-                        matcher.group("firstName"), matcher.group("lastName"),
-                        Integer.parseInt(matcher.group("guestCount")), defaultReservationLength)))
+                if (!addReservation(Reservation.fromString(line)).getStatus())
                     throw new FileCorruptedException();
             }
         } catch (FileNotFoundException e) {
@@ -55,23 +44,40 @@ public class ReservationManager {
         }
     }
 
-    public boolean addReservation(Reservation newReservation) {
+    public OperationResult<Reservation, Reservation> addReservation(Reservation newReservation) {
+        LocalDateTime newReservationStartTime = newReservation.getTime();
+        LocalDateTime newReservationEndTime = newReservationStartTime.plus(newReservation.getReservationLength());
+        List<Reservation> overlappedReservations = new ArrayList<>();
         for (Reservation reservation : reservations) {
+            LocalDateTime reservationStartTime = reservation.getTime();
+            LocalDateTime reservationEndTime = reservationStartTime.plus(reservation.getReservationLength());
+
             if (newReservation.getFirstName().equals(reservation.getFirstName())
                     && newReservation.getLastName().equals(reservation.getLastName())
-                    && newReservation.getTime().toLocalDate().equals(reservation.getTime().toLocalDate()))
-                return false;
+                    && newReservationStartTime.toLocalDate().equals(reservationStartTime.toLocalDate()))
+                return OperationResult.failed(reservation,
+                        "One person is only allow to make one reservation per day: ");
+
+            if (newReservationStartTime.isBefore(reservationEndTime)
+                    && reservationStartTime.isBefore(newReservationEndTime)) {
+                overlappedReservations.add(reservation);
+            }
         }
         reservations.add(newReservation);
-        return true;
+        return OperationResult.success(newReservation, "Reservation Created: ");
     }
 
-    public boolean addReservationAndSync(Reservation newReservation) throws IOException {
-        readFile();
-        boolean state = addReservation(newReservation);
-        if (state)
-            writeFile();
-        return state;
+    public OperationResult<OperationResult<Reservation, Reservation>, IOException> addReservationAndSync(
+            Reservation newReservation) {
+        try {
+            readFile();
+            OperationResult<Reservation, Reservation> state = addReservation(newReservation);
+            if (state.getStatus())
+                writeFile();
+            return OperationResult.success(state);
+        } catch (IOException e) {
+            return OperationResult.failed(e);
+        }
     }
 
     public List<Reservation> getReservations() {
