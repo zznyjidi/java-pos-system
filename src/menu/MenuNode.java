@@ -2,19 +2,20 @@ package menu;
 
 import java.util.Map;
 
-public class MenuNode {
+public class MenuNode implements RunnableNode {
+    String prompt;
+    Map<String, RunnableNode> actions;
+    MenuAction action;
+
     public interface MenuAction {
         void run(String input);
     }
 
-    String prompt;
-    Map<String, MenuNode> actions;
-    MenuAction action;
-
-    public MenuNode(String prompt, Map<String, MenuNode> actions) {
+    public MenuNode(String prompt, Map<String, RunnableNode> actions) {
         this.prompt = prompt;
         this.actions = actions;
-        this.action = (input) -> NodeParser.runNode(this);
+        this.action = (input) -> {
+        };
     }
 
     public MenuNode(String prompt, MenuAction action) {
@@ -23,9 +24,18 @@ public class MenuNode {
         this.action = action;
     }
 
-    public MenuNode(String prompt, Map<String, MenuNode> actions, MenuAction action) {
+    public MenuNode(String prompt, Map<String, RunnableNode> actions, MenuAction action) {
         this.prompt = prompt;
         this.actions = actions;
         this.action = action;
+    }
+
+    @Override
+    public void runNode() {
+        String input = IO.readln(prompt);
+        if (actions.containsKey(input))
+            actions.get(input).runNode();
+        else
+            action.run(input);
     }
 }
