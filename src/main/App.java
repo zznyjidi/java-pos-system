@@ -11,15 +11,16 @@ import objects.Reservation;
 public class App {
     static ReservationManager reservationManager = new ReservationManager(new File("reservations.table.txt"));
 
-    public static void addReservationWithString(String input) {
+    static void addReservationWithString(String input) {
         reservationManager.addReservationAndSync(Reservation.fromString(input)).printResult();
     }
 
-    public static void main(String[] args) throws Exception {
-        MenuNode root = new MenuNode("> ", Map.of(
-                "1", new MenuNode("Enter Reservation: ", App::addReservationWithString)
-        //
-        ));
+    static MenuNode root = new MenuNode("> ", Map.of(
+            "1", new MenuNode("Enter Reservation: ", App::addReservationWithString)
+    //
+    ));
+
+    public static void main(String[] args) {
         NodeParser.runNode(root);
     }
 }
