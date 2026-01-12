@@ -21,6 +21,9 @@ dependencies {
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+    // Use AssertJ for testing.
+    testImplementation("org.assertj:assertj-core:3.27.6")
+
     // This dependency is used by the application.
     implementation(libs.guava)
 }
@@ -34,10 +37,23 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "org.example.App"
+    mainClass = "main.App"
 }
 
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+
+sourceSets {
+    named("main") {
+        java {
+            srcDirs("src/app/")
+        }
+    }
+    named("test") {
+        java {
+            srcDirs("src/test/")
+        }
+    }
 }
