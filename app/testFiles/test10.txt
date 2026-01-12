@@ -1,0 +1,12 @@
+beef 0
+lettuce 5
+tomato 5
+bun 3
+cheese 3
+bacon 5
+bean 5
+onion 5
+fish 5
+mayo 5
+potato 5
+gravy 5
