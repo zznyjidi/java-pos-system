@@ -18,7 +18,7 @@ public class App {
 
     static MenuNode root = new MenuNode("> ", Map.of(
             "1", new MenuNode("Enter Reservation: ", App::addReservationWithString),
-            "", () -> running = false
+            "exit", () -> running = false
     //
     ));
 
