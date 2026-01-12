@@ -23,13 +23,16 @@ public class ReservationManager {
     }
 
     public void readFile() throws IOException {
+        reservations = new ArrayList<>();
         try (Scanner file = new Scanner(reservationFile)) {
             while (file.hasNext()) {
                 String line = file.nextLine();
                 if (line.isEmpty())
                     continue;
-                if (!addReservation(Reservation.fromString(line)).getStatus())
-                    throw new FileCorruptedException();
+                OperationResult<Reservation, Reservation> newReservationResult = addReservation(
+                        Reservation.fromString(line));
+                if (!newReservationResult.getStatus())
+                    throw new FileCorruptedException(newReservationResult.getError());
             }
         } catch (FileNotFoundException e) {
             reservationFile.createNewFile();

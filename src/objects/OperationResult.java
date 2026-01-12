@@ -53,7 +53,23 @@ public class OperationResult<R, E> {
     }
 
     public void printResult() {
-        IO.println(toString());
+        if (success) {
+            if (result instanceof OperationResult result) {
+                result.printResult();
+                return;
+            }
+            IO.println(message + result.toString());
+        } else {
+            if (result instanceof OperationResult result) {
+                result.printResult();
+                return;
+            }
+            if (result instanceof Exception exception) {
+                exception.printStackTrace();
+                return;
+            }
+            IO.println(message + error.toString());
+        }
     }
 
     public String toString() {
@@ -62,5 +78,13 @@ public class OperationResult<R, E> {
         } else {
             return message + error.toString();
         }
+    }
+
+    public R getResult() {
+        return result;
+    }
+
+    public E getError() {
+        return error;
     }
 }
