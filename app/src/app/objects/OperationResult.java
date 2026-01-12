@@ -58,13 +58,16 @@ public class OperationResult<R, E> {
                 result.printResult();
                 return;
             }
+            if (result instanceof Double result) {
+                IO.println(message + String.format("%.2f", result));
+            }
             IO.println(message + result.toString());
         } else {
-            if (result instanceof OperationResult result) {
-                result.printResult();
+            if (error instanceof OperationResult error) {
+                error.printResult();
                 return;
             }
-            if (result instanceof Exception exception) {
+            if (error instanceof Exception exception) {
                 exception.printStackTrace();
                 return;
             }
