@@ -1,16 +1,12 @@
-package test;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
 import main.App;
+
+import static org.assertj.core.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+// import org.junit.jupiter.api.BeforeAll;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
-import java.nio.file.Files;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class RestaurantManagerTest {
     static File reservationsFile = new File("reservations.table.txt");
@@ -30,88 +26,86 @@ public class RestaurantManagerTest {
 
     static String[] args = new String[0];
 
-    static String input = """
-            1
-            01/01/26 5:00PM Abby Johnson 6
+    // static String input = """
+    // 1
+    // 01/01/26 5:00PM Abby Johnson 6
 
-            1
-            01/01/26 5:00PM Abby Johnson 6
-            1
-            01/01/26 5:00PM Shawn Dieter 6
+    // 1
+    // 01/01/26 5:00PM Abby Johnson 6
+    // 1
+    // 01/01/26 5:00PM Shawn Dieter 6
 
-            1
-            01/01/26 5:00PM Abby Johnson 6
-            1
-            01/01/26 6:00PM Abby Johnson 6
+    // 1
+    // 01/01/26 5:00PM Abby Johnson 6
+    // 1
+    // 01/01/26 6:00PM Abby Johnson 6
 
-            1
-            01/01/26 5:00PM Abby Johnson 6
-            1
-            02/01/26 5:00PM Abby Johnson 6
+    // 1
+    // 01/01/26 5:00PM Abby Johnson 6
+    // 1
+    // 02/01/26 5:00PM Abby Johnson 6
 
-            1
-            01/01/26 5:00PM Abby Johnson 6
-            1
-            01/01/26 5:00PM Shawn Dieter 6
-            1
-            01/01/26 5:00PM James Lorenz 6
-            1
-            01/01/26 5:00PM David Johnson 6
-            1
-            01/01/26 5:00PM Chelsey Nuttall 6
-            1
-            01/01/26 5:00PM Walter Rohrbaugh 6
-            1
-            01/01/26 5:00PM Judith Coleman 6
-            1
-            01/01/26 5:00PM David Armour 6
-            1
-            01/01/26 5:00PM Catherine Netherton 6
+    // 1
+    // 01/01/26 5:00PM Abby Johnson 6
+    // 1
+    // 01/01/26 5:00PM Shawn Dieter 6
+    // 1
+    // 01/01/26 5:00PM James Lorenz 6
+    // 1
+    // 01/01/26 5:00PM David Johnson 6
+    // 1
+    // 01/01/26 5:00PM Chelsey Nuttall 6
+    // 1
+    // 01/01/26 5:00PM Walter Rohrbaugh 6
+    // 1
+    // 01/01/26 5:00PM Judith Coleman 6
+    // 1
+    // 01/01/26 5:00PM David Armour 6
+    // 1
+    // 01/01/26 5:00PM Catherine Netherton 6
 
-            1
-            01/01/26 5:00PM Catherine Netherton 49
-            1
-            01/01/26 5:00PM Abby Johnson 48
+    // 1
+    // 01/01/26 5:00PM Catherine Netherton 49
+    // 1
+    // 01/01/26 5:00PM Abby Johnson 48
 
-            1
-            01/01/26 5:00PM Abby Johnson 12
-            1
-            01/01/26 5:30PM Catherine Netherton 1
+    // 1
+    // 01/01/26 5:00PM Abby Johnson 12
+    // 1
+    // 01/01/26 5:30PM Catherine Netherton 1
 
-            1
-            01/01/26 5:00PM Abby Johnson 12
-            2
-            01/01/26 Abby Johnson
+    // 1
+    // 01/01/26 5:00PM Abby Johnson 12
+    // 2
+    // 01/01/26 Abby Johnson
 
-            1
-            01/01/26 5:00PM Abby Johnson 12
-            1
-            02/01/26 5:00PM Abby Johnson 12
-            2
-            01/01/26 Abby Johnson
+    // 1
+    // 01/01/26 5:00PM Abby Johnson 12
+    // 1
+    // 02/01/26 5:00PM Abby Johnson 12
+    // 2
+    // 01/01/26 Abby Johnson
 
-            1
-            01/01/26 5:00PM Abby Johnson 12
-            2
-            01/01/26 Jeff Johnson
+    // 1
+    // 01/01/26 5:00PM Abby Johnson 12
+    // 2
+    // 01/01/26 Jeff Johnson
 
-            3
-            double
-            triple
+    // 3
+    // double
+    // triple
 
+    // 3
+    // double
+    // triple
+    // hamburger
 
-            3
-            double
-            triple
-            hamburger
+    // """;
 
-
-            """;
-
-    @BeforeAll
-    public static void setup() {
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
-    }
+    // @BeforeAll
+    // public static void setup() {
+    // System.setIn(new ByteArrayInputStream(input.getBytes()));
+    // }
 
     public static void clear_file(File file) {
         try (FileWriter fileWriter = new FileWriter(file)) {
@@ -148,248 +142,226 @@ public class RestaurantManagerTest {
         }
     }
 
-    public static long compare_files(File file1, File file2) {
-        long compare = 0;
-        try {
-            compare = Files.mismatch(file1.toPath(), file2.toPath());
-        } catch (Exception e) {
-            IO.println(e);
-        }
-        return compare;
-    }
-
     @Test
     public void test01() {
         clear_file(reservationsFile);
-        /*
-         * String input =
-         * """
-         * 1
-         * 01/01/26 5:00PM Abby Johnson 6
-         * 
-         * """;
-         * System.setIn(new ByteArrayInputStream(input.getBytes()));
-         */
+
+        String input = """
+                1
+                01/01/26 5:00PM Abby Johnson 6
+                exit
+                """;
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+
         App.main(args);
-        assertEquals(-1, compare_files(reservationsFile, test1File));
+        assertThat(reservationsFile).hasSameTextualContentAs(test1File);
     }
 
     @Test
     public void test02() {
         clear_file(reservationsFile);
-        /*
-         * String input =
-         * """
-         * 1
-         * 01/01/26 5:00PM Abby Johnson 6
-         * 1
-         * 01/01/26 5:00PM Shawn Dieter 6
-         * 
-         * """;
-         * System.setIn(new ByteArrayInputStream(input.getBytes()));
-         */
+
+        String input = """
+                1
+                01/01/26 5:00PM Abby Johnson 6
+                1
+                01/01/26 5:00PM Shawn Dieter 6
+                exit
+                """;
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+
         App.main(args);
-        assertEquals(-1, compare_files(reservationsFile, test2File));
+        assertThat(reservationsFile).hasSameTextualContentAs(test2File);
     }
 
     @Test
     public void test03() {
         clear_file(reservationsFile);
-        /*
-         * String input =
-         * """
-         * 1
-         * 01/01/26 5:00PM Abby Johnson 6
-         * 1
-         * 01/01/26 6:00PM Abby Johnson 6
-         * 
-         * """;
-         * System.setIn(new ByteArrayInputStream(input.getBytes()));
-         */
+
+        String input = """
+                1
+                01/01/26 5:00PM Abby Johnson 6
+                1
+                01/01/26 6:00PM Abby Johnson 6
+                exit
+                """;
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+
         App.main(args);
-        assertEquals(-1, compare_files(reservationsFile, test1File));
+        assertThat(reservationsFile).hasSameTextualContentAs(test1File);
     }
 
     @Test
     public void test04() {
         clear_file(reservationsFile);
-        /*
-         * String input =
-         * """
-         * 1
-         * 01/01/26 5:00PM Abby Johnson 6
-         * 1
-         * 02/01/26 5:00PM Abby Johnson 6
-         * 
-         * """;
-         * System.setIn(new ByteArrayInputStream(input.getBytes()));
-         */
+
+        String input = """
+                1
+                01/01/26 5:00PM Abby Johnson 6
+                1
+                02/01/26 5:00PM Abby Johnson 6
+                exit
+                """;
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+
         App.main(args);
-        assertEquals(-1, compare_files(reservationsFile, test3File));
+        assertThat(reservationsFile).hasSameTextualContentAs(test3File);
     }
 
     @Test
     public void test05() {
         clear_file(reservationsFile);
-        /*
-         * String input =
-         * """
-         * 1
-         * 01/01/26 5:00PM Abby Johnson 6
-         * 1
-         * 01/01/26 5:00PM Shawn Dieter 6
-         * 1
-         * 01/01/26 5:00PM James Lorenz 6
-         * 1
-         * 01/01/26 5:00PM David Johnson 6
-         * 1
-         * 01/01/26 5:00PM Chelsey Nuttall 6
-         * 1
-         * 01/01/26 5:00PM Walter Rohrbaugh 6
-         * 1
-         * 01/01/26 5:00PM Judith Coleman 6
-         * 1
-         * 01/01/26 5:00PM David Armour 6
-         * 1
-         * 01/01/26 5:00PM Catherine Netherton 6
-         * 
-         * """;
-         * System.setIn(new ByteArrayInputStream(input.getBytes()));
-         */
+
+        String input = """
+                1
+                01/01/26 5:00PM Abby Johnson 6
+                1
+                01/01/26 5:00PM Shawn Dieter 6
+                1
+                01/01/26 5:00PM James Lorenz 6
+                1
+                01/01/26 5:00PM David Johnson 6
+                1
+                01/01/26 5:00PM Chelsey Nuttall 6
+                1
+                01/01/26 5:00PM Walter Rohrbaugh 6
+                1
+                01/01/26 5:00PM Judith Coleman 6
+                1
+                01/01/26 5:00PM David Armour 6
+                1
+                01/01/26 5:00PM Catherine Netherton 6
+                exit
+                """;
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+
         App.main(args);
-        assertEquals(-1, compare_files(reservationsFile, test4File));
+        assertThat(reservationsFile).hasSameTextualContentAs(test4File);
     }
 
     @Test
     public void test06() {
         clear_file(reservationsFile);
-        /*
-         * String input =
-         * """
-         * 1
-         * 01/01/26 5:00PM Catherine Netherton 49
-         * 1
-         * 01/01/26 5:00PM Abby Johnson 48
-         * 
-         * """;
-         * System.setIn(new ByteArrayInputStream(input.getBytes()));
-         */
+
+        String input = """
+                1
+                01/01/26 5:00PM Catherine Netherton 49
+                1
+                01/01/26 5:00PM Abby Johnson 48
+                exit
+                """;
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+
         App.main(args);
-        assertEquals(-1, compare_files(reservationsFile, test5File));
+        assertThat(reservationsFile).hasSameTextualContentAs(test5File);
     }
 
     @Test
     public void test07() {
         clear_file(reservationsFile);
-        /*
-         * String input =
-         * """
-         * 1
-         * 01/01/26 5:00PM Abby Johnson 12
-         * 1
-         * 01/01/26 5:30PM Catherine Netherton 1
-         * 
-         * """;
-         * System.setIn(new ByteArrayInputStream(input.getBytes()));
-         */
+
+        String input = """
+                1
+                01/01/26 5:00PM Abby Johnson 12
+                1
+                01/01/26 5:30PM Catherine Netherton 1
+                exit
+                """;
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+
         App.main(args);
-        assertEquals(-1, compare_files(reservationsFile, test6File));
+        assertThat(reservationsFile).hasSameTextualContentAs(test6File);
     }
 
     @Test
     public void test08() {
         clear_file(reservationsFile);
-        /*
-         * String input =
-         * """
-         * 1
-         * 01/01/26 5:00PM Abby Johnson 12
-         * 2
-         * 01/01/26 Abby Johnson
-         * 
-         * """;
-         * System.setIn(new ByteArrayInputStream(input.getBytes()));
-         */
+
+        String input = """
+                1
+                01/01/26 5:00PM Abby Johnson 12
+                2
+                01/01/26 Abby Johnson
+                exit
+                """;
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+
         App.main(args);
-        assertEquals(-1, compare_files(reservationsFile, test7File));
+        assertThat(reservationsFile).hasSameTextualContentAs(test7File);
     }
 
     @Test
     public void test09() {
         clear_file(reservationsFile);
-        /*
-         * String input =
-         * """
-         * 1
-         * 01/01/26 5:00PM Abby Johnson 12
-         * 1
-         * 02/01/26 5:00PM Abby Johnson 12
-         * 2
-         * 01/01/26 Abby Johnson
-         * 
-         * """;
-         * System.setIn(new ByteArrayInputStream(input.getBytes()));
-         */
+
+        String input = """
+                1
+                01/01/26 5:00PM Abby Johnson 12
+                1
+                02/01/26 5:00PM Abby Johnson 12
+                2
+                01/01/26 Abby Johnson
+                exit
+                """;
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+
         App.main(args);
-        assertEquals(-1, compare_files(reservationsFile, test8File));
+        assertThat(reservationsFile).hasSameTextualContentAs(test8File);
     }
 
     @Test
     public void test10() {
         clear_file(reservationsFile);
-        /*
-         * String input =
-         * """
-         * 1
-         * 01/01/26 5:00PM Abby Johnson 12
-         * 2
-         * 01/01/26 Jeff Johnson
-         * 
-         * """;
-         * System.setIn(new ByteArrayInputStream(input.getBytes()));
-         */
+
+        String input = """
+                1
+                01/01/26 5:00PM Abby Johnson 12
+                2
+                01/01/26 Jeff Johnson
+                exit
+                """;
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+
         App.main(args);
-        assertEquals(-1, compare_files(reservationsFile, test9File));
+        assertThat(reservationsFile).hasSameTextualContentAs(test9File);
     }
 
     @Test
     public void test11() {
         reset_inventory();
         reset_profit();
-        /*
-         * String input =
-         * """
-         * 3
-         * double
-         * triple
-         * 
-         * 
-         * """;
-         * System.setIn(new ByteArrayInputStream(input.getBytes()));
-         */
+
+        String input = """
+                3
+                double
+                triple
+
+                exit
+                """;
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+
         App.main(args);
-        assertEquals(-1, compare_files(inventoryFile, test10File));
-        assertEquals(-1, compare_files(profitFile, test11File));
+        assertThat(inventoryFile).hasSameTextualContentAs(test10File);
+        assertThat(profitFile).hasSameTextualContentAs(test11File);
     }
 
     @Test
     public void test12() {
         reset_inventory();
         reset_profit();
-        /*
-         * String input =
-         * """
-         * 3
-         * double
-         * triple
-         * hamburger
-         * 
-         * 
-         * """;
-         * System.setIn(new ByteArrayInputStream(input.getBytes()));
-         */
+
+        String input = """
+                3
+                double
+                triple
+                hamburger
+
+                exit
+                """;
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+
         App.main(args);
-        assertEquals(-1, compare_files(inventoryFile, test10File));
-        assertEquals(-1, compare_files(profitFile, test11File));
+        assertThat(inventoryFile).hasSameTextualContentAs(test10File);
+        assertThat(profitFile).hasSameTextualContentAs(test11File);
     }
 }
