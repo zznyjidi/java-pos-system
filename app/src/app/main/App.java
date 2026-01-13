@@ -68,11 +68,44 @@ public class App {
         }
     }
 
+    static void showReservationAndSync() {
+        try {
+            reservationManager.readFile();
+            IO.println(reservationManager.getReservations());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void showProfitAndSync() {
+        try {
+            orderManager.readFile();
+            IO.println(orderManager.getProfit());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void showInventoryAndSync() {
+        try {
+            ingredientManger.readFile();
+            IO.println(ingredientManger.getIngredients());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @SuppressWarnings("null")
-    static MenuNode root = new MenuNode("> ", Map.of(
+    static MenuNode root = new MenuNode("Create(1), Delete(2) Reservation, Order(3), Show Status(4)\n> ", Map.of(
             "1", new MenuNode("Enter Reservation: ", App::addReservationWithString),
             "2", new MenuNode("Remove Reservation: ", App::removeReservationWithString),
             "3", App::orderAction,
+            "4", new MenuNode("Reservation(1), Profit(2) or Inventory(3): ", Map.of(
+                    "1", App::showReservationAndSync,
+                    "2", App::showProfitAndSync,
+                    "3", App::showInventoryAndSync
+            //
+            )),
             "exit", () -> running = false
     //
     ));

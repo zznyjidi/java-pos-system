@@ -95,4 +95,8 @@ public class IngredientManger {
             return OperationResult.failed(e);
         }
     }
+
+    public Map<String, Integer> getIngredients() {
+        return ingredients;
+    }
 }

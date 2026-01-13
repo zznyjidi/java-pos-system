@@ -67,4 +67,8 @@ public class OrderManager {
         }
         return OperationResult.success(orderPrice, "Order Finished: Total: ");
     }
+
+    public double getProfit() {
+        return profit;
+    }
 }
