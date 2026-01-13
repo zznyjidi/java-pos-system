@@ -24,6 +24,9 @@ dependencies {
     // Use AssertJ for testing.
     testImplementation("org.assertj:assertj-core:3.27.6")
 
+    // Use Apache Avro for reusable stream
+    testImplementation("org.apache.avro:avro:1.12.1")
+
     // This dependency is used by the application.
     implementation(libs.guava)
 }

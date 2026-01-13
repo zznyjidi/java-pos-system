@@ -1,10 +1,11 @@
 import main.App;
 
 import static org.assertj.core.api.Assertions.*;
-import org.junit.jupiter.api.Test;
-// import org.junit.jupiter.api.BeforeAll;
 
-import java.io.ByteArrayInputStream;
+import org.apache.avro.util.ReusableByteArrayInputStream;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
+
 import java.io.File;
 import java.io.FileWriter;
 
@@ -26,86 +27,12 @@ public class RestaurantManagerTest {
 
     static String[] args = new String[0];
 
-    // static String input = """
-    // 1
-    // 01/01/26 5:00PM Abby Johnson 6
+    static ReusableByteArrayInputStream inputStream = new ReusableByteArrayInputStream();
 
-    // 1
-    // 01/01/26 5:00PM Abby Johnson 6
-    // 1
-    // 01/01/26 5:00PM Shawn Dieter 6
-
-    // 1
-    // 01/01/26 5:00PM Abby Johnson 6
-    // 1
-    // 01/01/26 6:00PM Abby Johnson 6
-
-    // 1
-    // 01/01/26 5:00PM Abby Johnson 6
-    // 1
-    // 02/01/26 5:00PM Abby Johnson 6
-
-    // 1
-    // 01/01/26 5:00PM Abby Johnson 6
-    // 1
-    // 01/01/26 5:00PM Shawn Dieter 6
-    // 1
-    // 01/01/26 5:00PM James Lorenz 6
-    // 1
-    // 01/01/26 5:00PM David Johnson 6
-    // 1
-    // 01/01/26 5:00PM Chelsey Nuttall 6
-    // 1
-    // 01/01/26 5:00PM Walter Rohrbaugh 6
-    // 1
-    // 01/01/26 5:00PM Judith Coleman 6
-    // 1
-    // 01/01/26 5:00PM David Armour 6
-    // 1
-    // 01/01/26 5:00PM Catherine Netherton 6
-
-    // 1
-    // 01/01/26 5:00PM Catherine Netherton 49
-    // 1
-    // 01/01/26 5:00PM Abby Johnson 48
-
-    // 1
-    // 01/01/26 5:00PM Abby Johnson 12
-    // 1
-    // 01/01/26 5:30PM Catherine Netherton 1
-
-    // 1
-    // 01/01/26 5:00PM Abby Johnson 12
-    // 2
-    // 01/01/26 Abby Johnson
-
-    // 1
-    // 01/01/26 5:00PM Abby Johnson 12
-    // 1
-    // 02/01/26 5:00PM Abby Johnson 12
-    // 2
-    // 01/01/26 Abby Johnson
-
-    // 1
-    // 01/01/26 5:00PM Abby Johnson 12
-    // 2
-    // 01/01/26 Jeff Johnson
-
-    // 3
-    // double
-    // triple
-
-    // 3
-    // double
-    // triple
-    // hamburger
-
-    // """;
-
-    // @BeforeAll
-    // public static void setup() {
-    // System.setIn(new ByteArrayInputStream(input.getBytes()));
-    // }
+    @BeforeAll
+    public static void setup() {
+        System.setIn(inputStream);
+    }
 
     public static void clear_file(File file) {
         try (FileWriter fileWriter = new FileWriter(file)) {
@@ -151,7 +78,7 @@ public class RestaurantManagerTest {
                 01/01/26 5:00PM Abby Johnson 6
                 exit
                 """;
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        inputStream.setByteArray(input.getBytes(), 0, input.length());
 
         App.main(args);
         assertThat(reservationsFile).hasSameTextualContentAs(test1File);
@@ -168,7 +95,7 @@ public class RestaurantManagerTest {
                 01/01/26 5:00PM Shawn Dieter 6
                 exit
                 """;
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        inputStream.setByteArray(input.getBytes(), 0, input.length());
 
         App.main(args);
         assertThat(reservationsFile).hasSameTextualContentAs(test2File);
@@ -185,7 +112,7 @@ public class RestaurantManagerTest {
                 01/01/26 6:00PM Abby Johnson 6
                 exit
                 """;
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        inputStream.setByteArray(input.getBytes(), 0, input.length());
 
         App.main(args);
         assertThat(reservationsFile).hasSameTextualContentAs(test1File);
@@ -202,7 +129,7 @@ public class RestaurantManagerTest {
                 02/01/26 5:00PM Abby Johnson 6
                 exit
                 """;
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        inputStream.setByteArray(input.getBytes(), 0, input.length());
 
         App.main(args);
         assertThat(reservationsFile).hasSameTextualContentAs(test3File);
@@ -233,7 +160,7 @@ public class RestaurantManagerTest {
                 01/01/26 5:00PM Catherine Netherton 6
                 exit
                 """;
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        inputStream.setByteArray(input.getBytes(), 0, input.length());
 
         App.main(args);
         assertThat(reservationsFile).hasSameTextualContentAs(test4File);
@@ -250,7 +177,7 @@ public class RestaurantManagerTest {
                 01/01/26 5:00PM Abby Johnson 48
                 exit
                 """;
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        inputStream.setByteArray(input.getBytes(), 0, input.length());
 
         App.main(args);
         assertThat(reservationsFile).hasSameTextualContentAs(test5File);
@@ -267,7 +194,7 @@ public class RestaurantManagerTest {
                 01/01/26 5:30PM Catherine Netherton 1
                 exit
                 """;
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        inputStream.setByteArray(input.getBytes(), 0, input.length());
 
         App.main(args);
         assertThat(reservationsFile).hasSameTextualContentAs(test6File);
@@ -284,7 +211,7 @@ public class RestaurantManagerTest {
                 01/01/26 Abby Johnson
                 exit
                 """;
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        inputStream.setByteArray(input.getBytes(), 0, input.length());
 
         App.main(args);
         assertThat(reservationsFile).hasSameTextualContentAs(test7File);
@@ -303,7 +230,7 @@ public class RestaurantManagerTest {
                 01/01/26 Abby Johnson
                 exit
                 """;
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        inputStream.setByteArray(input.getBytes(), 0, input.length());
 
         App.main(args);
         assertThat(reservationsFile).hasSameTextualContentAs(test8File);
@@ -320,7 +247,7 @@ public class RestaurantManagerTest {
                 01/01/26 Jeff Johnson
                 exit
                 """;
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        inputStream.setByteArray(input.getBytes(), 0, input.length());
 
         App.main(args);
         assertThat(reservationsFile).hasSameTextualContentAs(test9File);
@@ -338,7 +265,7 @@ public class RestaurantManagerTest {
 
                 exit
                 """;
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        inputStream.setByteArray(input.getBytes(), 0, input.length());
 
         App.main(args);
         assertThat(inventoryFile).hasSameTextualContentAs(test10File);
@@ -358,7 +285,7 @@ public class RestaurantManagerTest {
 
                 exit
                 """;
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        inputStream.setByteArray(input.getBytes(), 0, input.length());
 
         App.main(args);
         assertThat(inventoryFile).hasSameTextualContentAs(test10File);
