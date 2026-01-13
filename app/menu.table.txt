@@ -1,0 +1,10 @@
+hamburger $8.99 beef lettuce tomato bun
+cheeseburger $9.49 beef cheese bun
+baconburger $10.99 beef bacon cheese bun
+veggieburger $8.49 bean lettuce tomato onion bun
+double $11.49 beef beef cheese bun
+triple $13.29 beef beef beef cheese bun
+fishburger $9.29 fish lettuce mayo bun
+fries $4.99 potato
+poutine $6.49 potato gravy
+coleslaw $3.29 lettuce mayo onion
