@@ -19,6 +19,9 @@ public class ReservationManager {
     List<Reservation> reservations = new ArrayList<>();
     File reservationFile;
 
+    int tableCount = 8;
+    int eachTableSeat = 6;
+
     public ReservationManager(File reservationFile) {
         this.reservationFile = reservationFile;
     }
@@ -49,6 +52,9 @@ public class ReservationManager {
     }
 
     public OperationResult<Reservation, Reservation> addReservation(Reservation newReservation) {
+        if (newReservation.getGuestCount() > tableCount * eachTableSeat)
+            return OperationResult.failed(newReservation, "Reservation Too Large: ");
+
         LocalDateTime newReservationStartTime = newReservation.getTime();
         List<Reservation> overlappedReservations = new ArrayList<>();
         for (Reservation reservation : reservations) {
@@ -64,6 +70,20 @@ public class ReservationManager {
                 overlappedReservations.add(reservation);
             }
         }
+
+        int requiredTable = getTableCount(newReservation);
+        for (int i = 0; i < overlappedReservations.size(); i++) {
+            Reservation currentReservation = overlappedReservations.get(i);
+            int occupiedTableCount = getTableCount(currentReservation) + requiredTable;
+            for (int j = i + 1; j < overlappedReservations.size(); j++) {
+                Reservation checkingReservation = overlappedReservations.get(j);
+                if (currentReservation.isOverlapping(checkingReservation))
+                    occupiedTableCount += getTableCount(checkingReservation);
+            }
+            if (occupiedTableCount > tableCount)
+                return OperationResult.failed(newReservation, "Not Enough Seat Left: ");
+        }
+
         reservations.add(newReservation);
         return OperationResult.success(newReservation, "Reservation Created: ");
     }
@@ -114,5 +134,10 @@ public class ReservationManager {
 
     public List<Reservation> getReservations() {
         return reservations;
+    }
+
+    int getTableCount(Reservation reservation) {
+        return (reservation.getGuestCount() / eachTableSeat)
+                + (reservation.getGuestCount() % eachTableSeat == 0 ? 0 : 1);
     }
 }
