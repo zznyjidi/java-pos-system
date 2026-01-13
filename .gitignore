@@ -1,6 +1,6 @@
 # File created using '.gitignore Generator' for Visual Studio Code: https://bit.ly/vscode-gig
-# Created by https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,java,linux,macos
-# Edit at https://www.toptal.com/developers/gitignore?templates=windows,visualstudiocode,java,linux,macos
+# Created by https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,macos,linux,java,gradle
+# Edit at https://www.toptal.com/developers/gitignore?templates=windows,visualstudiocode,macos,linux,java,gradle
 
 ### Java ###
 # Compiled class file
@@ -50,8 +50,7 @@ replay_pid*
 .LSOverride
 
 # Icon must end with two \r
-Icon
-
+Icon
 
 # Thumbnails
 ._*
@@ -121,9 +120,37 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,java,linux,macos
+### Gradle ###
+.gradle
+**/build/
+!src/**/build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Avoid ignore Gradle wrappper properties
+!gradle-wrapper.properties
+
+# Cache of project
+.gradletasknamecache
+
+# Eclipse Gradle plugin generated files
+# Eclipse Core
+.project
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
+### Gradle Patch ###
+# Java heap dump
+*.hprof
+
+# End of https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,macos,linux,java,gradle
 
 # Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
+
 *.table.txt
 
 # Ignore Gradle project-specific cache directory
