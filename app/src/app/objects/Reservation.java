@@ -78,6 +78,11 @@ public class Reservation {
         this.reservationLength = reservationLength;
     }
 
+    public boolean isOverlapping(Reservation other) {
+        return getTime().isBefore(other.getTime().plus(other.getReservationLength()))
+                && other.getTime().isBefore(getTime().plus(getReservationLength()));
+    }
+
     public String toString() {
         return String.format("%s %s %s %d",
                 timeFormat.format(time),

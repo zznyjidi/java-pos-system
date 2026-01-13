@@ -2,7 +2,12 @@ package main;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import manager.FoodManager;
 import manager.IngredientManger;
@@ -20,6 +25,10 @@ public class App {
     static OrderManager orderManager = new OrderManager(new File("profit.table.txt"), ingredientManger);
     static FoodManager foodManager;
 
+    static DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("dd/MM/yy", Locale.US);
+    static Pattern removeReservationPattern = Pattern
+            .compile("(?<daytime>[0-9]{2}\\/[0-9]{2}\\/[0-9]{2,4}) (?<firstName>[a-zA-Z]+) (?<lastName>[a-zA-Z]+)");
+
     static {
         try {
             foodManager = new FoodManager(new File("menu.table.txt"));
@@ -30,6 +39,15 @@ public class App {
 
     static void addReservationWithString(String input) {
         reservationManager.addReservationAndSync(Reservation.fromString(input)).printResult();
+    }
+
+    static void removeReservationWithString(String input) {
+        Matcher matcher = removeReservationPattern.matcher(input);
+        if (!matcher.find())
+            throw new IllegalArgumentException("Reservation String Invalid: " + input);
+        reservationManager.removeReservatinoAndSync(
+                matcher.group("firstName"), matcher.group("lastName"),
+                LocalDate.parse(matcher.group("daytime"), timeFormat)).printResult();
     }
 
     static void orderAction() {
@@ -53,6 +71,7 @@ public class App {
     @SuppressWarnings("null")
     static MenuNode root = new MenuNode("> ", Map.of(
             "1", new MenuNode("Enter Reservation: ", App::addReservationWithString),
+            "2", new MenuNode("Remove Reservation: ", App::removeReservationWithString),
             "3", App::orderAction,
             "exit", () -> running = false
     //
